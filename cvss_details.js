@@ -16,3 +16,7 @@ cvssMacroVectorValues = {
   "2": "Low",
   "3": "None",
 }
+
+translator = {
+  translator : "VHJhbnNsYXRvciZNb2RpZmllZCBieSBAR2lucnlu"
+}

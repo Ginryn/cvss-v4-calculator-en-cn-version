@@ -27,10 +27,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-        <title>CVSS v4.0 calculator</title>
+        <title>CVSS v4.0 Calculator</title>
         <script src="https://unpkg.com/vue@3.2.45/dist/vue.global.prod.js"></script>
         <script src="cvss_config.js?v=2"></script>
+        <script src="cvss_config_cn.js?v=2"></script>
         <script src="cvss_details.js?v=1"></script>
+        <script src="cvss_details_cn.js?v=1"></script>
         <script src="cvss_lookup.js?v=5"></script>
         <script src="cvss_score.js?v=2"></script>
         <script src="max_composed.js?v=1"></script>
@@ -45,16 +47,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <body>
         <div id="app" class="container">
             <div id="header">
-                <h4 class="page-title">CVSS v4.0 calculator</h4>
-                <mark class="tooltip c-hand" data-tooltip="Click vector to copy to clipboard" @click="copyVector">
-                    {{ vector }}
+                <h4 class="page-title">CVSS v4.0 {{otherTexts.Calculator}} {{db64(translator.translator)}}</h4>
+                <mark class="tooltip c-hand" :data-tooltip="otherTexts.Clipboard" @click="copyVector">
+                    {{ score }} / {{ qualScore }} {{otherTexts.Left_parenthesis}}{{ vector }}{{otherTexts.Right_parenthesis}}
                 </mark>
-                <button class="btn btn-sm ml-2" @click="onReset()">Reset</button>
+                <button class="btn btn-sm ml-2" @click="onReset()">{{buttonTexts.reset}}</button>
+                <button class="btn btn-sm ml-2" @click="switchLanguage()">{{buttonTexts.switchLanguage}}</button>
+                <!-- <button @click="debugPrintCvssConfigCn">打印cvssConfigCn</button> -->
                 <h5 class="score-line">
                     <span class="tooltip tooltip-bottom c-hand"
-                          :data-tooltip="showDetails ? 'Hide details' : 'Show details'"
+                          :data-tooltip="showDetails ? otherTexts.Hide_details : otherTexts.Show_details"
                           @click="showDetails = !showDetails">
-                        CVSS v4.0 Score:
+                        CVSS v4.0 {{otherTexts.Score}}:
                         <span :class="scoreClass(qualScore)">{{ score }} / {{ qualScore }}</span>
                         <span v-if="!showDetails"> ⊕</span>
                         <span v-else> ⊖</span>
@@ -73,7 +77,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                     <div class="metric-type" v-for="(metricTypeData, metricType) in cvssConfigData">
                         <h4 class="text-center">
                             {{ metricType }}
-                            <span class="tooltip tooltip-left c-hand text-small" :data-tooltip="'This category is usually filled \n by the ' + metricTypeData.fill">
+                            <span class="tooltip tooltip-left c-hand text-small" :data-tooltip="otherTexts.Base_metrics_des + metricTypeData.fill + otherTexts.Base_metrics_des_end">
                                 <sup>?</sup>
                             </span>
                         </h4>

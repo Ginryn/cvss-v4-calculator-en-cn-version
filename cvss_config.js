@@ -732,3 +732,32 @@ cvssConfig = {
     }
   }
 }
+
+button_texts = {
+  reset: 'Reset',
+  switchLanguage: '切换至中文/Change to Chinese',
+}
+
+
+other_texts=
+{
+  Calculator : 'calculator',
+  Score : 'Score',
+  Clipboard : 'Click here to copy to clipboard',
+  Show_details : 'Show details',
+  Hide_details : 'Hide details',
+  None : 'None',
+  Base_metrics_des: 'This category is usually filled \n by the ',
+  Base_metrics_des_end : '',
+  Right_parenthesis :')',
+  Left_parenthesis :'('
+}
+
+
+severity_text= {
+  none: 'None',
+  low: 'Low',
+  medium: 'Medium',
+  high: 'High',
+  critical: 'Critical',
+}

@@ -5,6 +5,9 @@ const app = Vue.createApp({
     data() {
         return {
             cvssConfigData: cvssConfig,
+            buttonTexts: button_texts,
+            otherTexts: other_texts,
+            severity_text:severity_text,
             maxComposedData: maxComposed,
             maxSeverityData: maxSeverity,
             expectedMetricOrder: expectedMetricOrder,
@@ -14,7 +17,8 @@ const app = Vue.createApp({
             cvssSelected: null,
             header_height: 0,
             lookup: cvssLookup_global,
-            macroVector: null
+            macroVector: null,
+            translator :translator
         }
     },
     methods: {
@@ -30,16 +34,16 @@ const app = Vue.createApp({
             return result
         },
         scoreClass(qualScore) {
-            if (qualScore == "Low") {
+            if (qualScore == "Low" || qualScore == "低") {
                 return "c-hand text-success"
             }
-            else if (qualScore == "Medium") {
+            else if (qualScore == "Medium"|| qualScore == "中") {
                 return "c-hand text-warning"
             }
-            else if (qualScore == "High") {
+            else if (qualScore == "High"|| qualScore == "高") {
                 return "c-hand text-error"
             }
-            else if (qualScore == "Critical") {
+            else if (qualScore == "Critical"|| qualScore == "严重") {
                 return "c-hand text-error text-bold"
             }
             else {
@@ -123,6 +127,38 @@ const app = Vue.createApp({
                 }
             }
         },
+        // debugPrintCvssConfigCn() {
+        //     console.log("cvssConfigCn:", cvssConfigCn);
+        // },
+
+        switchLanguage(){
+            const configDataStr = JSON.stringify(this.cvssConfigData);
+            const isEnglish = configDataStr === JSON.stringify(cvssConfig);
+            const targetConfig = isEnglish ? cvssConfigCn : cvssConfig;
+            const targetButtonConfig = isEnglish ? button_texts_cn : button_texts;
+            const targetOtherConfig = isEnglish ? other_texts_cn : other_texts;
+            const targetcvssMacroVectorDetailsData = isEnglish ? cvssMacroVectorDetails_cn : cvssMacroVectorDetails;
+            const targetcvssMacroVectorValuesData = isEnglish ? cvssMacroVectorValues_cn : cvssMacroVectorValues;
+            const targetseverity_text = isEnglish ? severity_text_cn : severity_text;
+            const targetranslator = isEnglish ? translator_cn : translator;
+
+            console.log(isEnglish ? "当前是英文配置，即将切换至中文配置..." : "当前是中文配置，即将切换至英文配置...");
+            this.cvssConfigData = targetConfig;
+            this.buttonTexts = targetButtonConfig
+            this.otherTexts = targetOtherConfig
+            this.cvssMacroVectorDetailsData = targetcvssMacroVectorDetailsData
+            this.cvssMacroVectorValuesData = targetcvssMacroVectorValuesData
+            this.severity_text = targetseverity_text
+            this.translator = targetranslator
+            document.title = "CVSS v4.0 " + this.otherTexts.Calculator;
+            // console.log(this.cvssConfigData);
+
+        },
+
+        db64(input) {
+            return decodeURIComponent(escape(window.atob(input)));
+        },
+
         splitObjectEntries(object, chunkSize) {
             arr = Object.entries(object)
             res = [];
@@ -151,21 +187,35 @@ const app = Vue.createApp({
                 this.maxSeverityData,
                 this.macroVector)
         },
+        // qualScore() {
+        //     if (this.score == 0) {
+        //         return "None"
+        //     }
+        //     else if (this.score < 4.0) {
+        //         return "Low"
+        //     }
+        //     else if (this.score < 7.0) {
+        //         return "Medium"
+        //     }
+        //     else if (this.score < 9.0) {
+        //         return "High"
+        //     }
+        //     else {
+        //         return "Critical"
+        //     }
+
         qualScore() {
+            const severityTexts = this.severity_text;
             if (this.score == 0) {
-                return "None"
-            }
-            else if (this.score < 4.0) {
-                return "Low"
-            }
-            else if (this.score < 7.0) {
-                return "Medium"
-            }
-            else if (this.score < 9.0) {
-                return "High"
-            }
-            else {
-                return "Critical"
+              return severityTexts.none;
+            } else if (this.score < 4.0) {
+              return severityTexts.low;
+            } else if (this.score < 7.0) {
+              return severityTexts.medium;
+            } else if (this.score < 9.0) {
+              return severityTexts.high;
+            } else {
+              return severityTexts.critical;
             }
         },
     },
@@ -186,4 +236,4 @@ const app = Vue.createApp({
     }
 })
 
-app.mount("#app")
+app.mount("#app");
